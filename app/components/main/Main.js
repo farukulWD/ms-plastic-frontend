@@ -11,7 +11,7 @@ const Main = ({ children }) => {
   return (
     <>
       {user ? (
-        <Layout className="min-h-screen">
+        <Layout className="min-h-screen ">
           <SideBar />
           <Layout>
             <Content
