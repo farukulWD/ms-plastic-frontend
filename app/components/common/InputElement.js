@@ -9,6 +9,7 @@ function InputElement({
   onChange,
   label,
   type = "text",
+  errorMessage,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -19,15 +20,18 @@ function InputElement({
 
       <div className="relative w-full   text-white  ">
         {type === "password" ? (
-          <input
-            className="outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 "
-            name={name}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            id={name}
-            type={showPassword ? "text" : "password"}
-          />
+          <div>
+            <input
+              className="outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 "
+              name={name}
+              placeholder={placeholder}
+              value={value}
+              onChange={onChange}
+              id={name}
+              type={showPassword ? "text" : "password"}
+            />
+            {errorMessage && <p>{errorMessage}</p>}
+          </div>
         ) : (
           <input
             className="outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 "

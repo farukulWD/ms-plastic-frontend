@@ -4,14 +4,14 @@ import { Button, Input, notification } from "antd";
 import React, { useState } from "react";
 import InputElement from "../common/InputElement";
 import axios from "axios";
+import PrimaryButton from "../common/PrimaryButton";
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((pre) => {
@@ -32,7 +32,6 @@ function Login() {
       setIsLoading(false);
       notification.success({ message: "Login success" });
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       notification.error({ message: error.message });
     }
@@ -42,8 +41,8 @@ function Login() {
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="min:w-full md:min-w-[600px] p-[20px] rounded-lg bg-black-secondary items-center justify-center">
         <div className="text-center ">
-          <h2>Welcome Back</h2>
-          <h3>Please Login here!</h3>
+          <h2 className="text-xl">Welcome Back</h2>
+          <h3 className="text-3xl ">Please Login here!</h3>
         </div>
         <div>
           <InputElement
@@ -52,6 +51,7 @@ function Login() {
             value={formData.email}
             onChange={handleChange}
             placeholder={"Enter Email"}
+            errorMessage={"Email is required"}
           />
           <InputElement
             label={"Password"}
@@ -62,13 +62,12 @@ function Login() {
             type="password"
           />
         </div>
-        <Button
-          loading={isLoading}
+        <PrimaryButton
           onClick={handleLogin}
-          className="bg-black-primary text-white border-none hover:bg-black-secondary"
-        >
-          Login{" "}
-        </Button>
+          title={"Login"}
+          loading={isLoading}
+          className={""}
+        />
       </div>
     </div>
   );
