@@ -16,12 +16,12 @@ function SideBar() {
     {
       key: "1",
       icon: React.createElement(UserOutlined),
-      label: <Link href="/add-product">Add Product</Link>,
+      label: <Link href="dashboard/add-product">Add Product</Link>,
     },
     {
       key: "2",
       icon: React.createElement(VideoCameraOutlined),
-      label: <Link href="/">Home</Link>,
+      label: <Link href="/dashboard">Home</Link>,
     },
   ];
 

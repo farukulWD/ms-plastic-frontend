@@ -1,6 +1,5 @@
-import { DotLottiePlayer } from "@dotlottie/react-player";
-import { Button, Input, notification } from "antd";
-
+"use client";
+import { notification } from "antd";
 import React, { useState } from "react";
 import InputElement from "../common/InputElement";
 import axios from "axios";
