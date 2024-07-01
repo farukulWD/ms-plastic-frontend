@@ -1,5 +1,5 @@
+import cn from "@/utils/cn";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
-import { Input } from "antd";
 import React, { useState } from "react";
 
 function InputElement({
@@ -10,6 +10,7 @@ function InputElement({
   label,
   type = "text",
   errorMessage,
+  className,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -18,11 +19,15 @@ function InputElement({
         {label}
       </label>
 
-      <div className="relative w-full   text-white  ">
+      <div className=" w-full   text-white  ">
         {type === "password" ? (
-          <div>
+          <div className="relative">
             <input
-              className="outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 "
+              style={{ border: errorMessage ? "1px solid red" : "" }}
+              className={cn(
+                "outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 ",
+                className
+              )}
               name={name}
               placeholder={placeholder}
               value={value}
@@ -30,31 +35,42 @@ function InputElement({
               id={name}
               type={showPassword ? "text" : "password"}
             />
-            {errorMessage && <p>{errorMessage}</p>}
+            {errorMessage && (
+              <label className="text-red-700">{errorMessage}</label>
+            )}
+            {type === "password" && (
+              <div className="absolute right-5 top-[15%]">
+                {!showPassword ? (
+                  <EyeOutlined
+                    title="Show password"
+                    onClick={() => setShowPassword(true)}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    title="Hide password"
+                    onClick={() => setShowPassword(false)}
+                  />
+                )}
+              </div>
+            )}
           </div>
         ) : (
-          <input
-            className="outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 "
-            name={name}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            id={name}
-            type={type}
-          />
-        )}
-        {type === "password" && (
-          <div className="absolute right-5 top-[26%]">
-            {!showPassword ? (
-              <EyeOutlined
-                title="Show password"
-                onClick={() => setShowPassword(true)}
-              />
-            ) : (
-              <EyeInvisibleOutlined
-                title="Hide password"
-                onClick={() => setShowPassword(false)}
-              />
+          <div>
+            <input
+              style={{ border: errorMessage ? "1px solid red" : "" }}
+              className={cn(
+                "outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700  ",
+                className
+              )}
+              name={name}
+              placeholder={placeholder}
+              value={value}
+              onChange={onChange}
+              id={name}
+              type={type}
+            />
+            {errorMessage && (
+              <label className="text-red-700">{errorMessage}</label>
             )}
           </div>
         )}

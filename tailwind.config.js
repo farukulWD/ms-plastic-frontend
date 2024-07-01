@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         "black-primary": "#0e1111",
         "black-secondary": "#232b2b",
+        "gary-100": "#232b2b",
       },
     },
   },

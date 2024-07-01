@@ -15,13 +15,13 @@ function SideBar() {
   const items = [
     {
       key: "1",
-      icon: React.createElement(UserOutlined),
-      label: <Link href="dashboard/add-product">Add Product</Link>,
+      icon: React.createElement(VideoCameraOutlined),
+      label: <Link href="/dashboard">Home</Link>,
     },
     {
       key: "2",
-      icon: React.createElement(VideoCameraOutlined),
-      label: <Link href="/dashboard">Home</Link>,
+      icon: React.createElement(UserOutlined),
+      label: <Link href="dashboard/add-product">Add Product</Link>,
     },
   ];
 
@@ -36,7 +36,7 @@ function SideBar() {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[currentRoute === "/" ? "2" : "1"]}
+        defaultSelectedKeys={[currentRoute === "/dashboard" && "1"]}
         items={items}
       />
     </Sider>

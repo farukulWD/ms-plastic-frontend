@@ -4,35 +4,69 @@ import React, { useState } from "react";
 import InputElement from "../common/InputElement";
 import axios from "axios";
 import PrimaryButton from "../common/PrimaryButton";
+import ShowError from "../common/ShowError";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchRoute = searchParams.get("redirect");
   const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
-    setFormData((pre) => {
-      return {
-        ...pre,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const validation = (data) => {
+    const { email, password } = data;
+    let valid = true;
+    let tempErrors = { email: "", password: "" };
+
+    if (!email) {
+      tempErrors.email = "Email is required";
+      valid = false;
+    }
+    if (!password) {
+      tempErrors.password = "Password is required";
+      valid = false;
+    }
+
+    setErrors(tempErrors);
+    return valid;
   };
 
   const handleLogin = async () => {
+    setErrors({});
+    if (!validation(formData)) {
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const result = await axios.post(
-        "http://localhost:5000/api/v1/auth/login",
-        formData
-      );
+      const result = await axiosInstance.post("/auth/login", formData);
       setIsLoading(false);
       notification.success({ message: "Login success" });
+      if (searchRoute) {
+        router.push(searchRoute);
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error) {
       setIsLoading(false);
-      notification.error({ message: error.message });
+      ShowError(error);
     }
   };
 
@@ -50,7 +84,7 @@ function Login() {
             value={formData.email}
             onChange={handleChange}
             placeholder={"Enter Email"}
-            errorMessage={"Email is required"}
+            errorMessage={errors.email}
           />
           <InputElement
             label={"Password"}
@@ -59,8 +93,10 @@ function Login() {
             onChange={handleChange}
             placeholder={"Enter Password"}
             type="password"
+            errorMessage={errors.password}
           />
         </div>
+
         <PrimaryButton
           onClick={handleLogin}
           title={"Login"}
