@@ -1,3 +1,4 @@
+"use client";
 import cn from "@/utils/cn";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import React, { useState } from "react";

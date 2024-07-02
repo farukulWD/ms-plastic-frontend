@@ -9,13 +9,17 @@ import { useSearchParams } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import formValidation from "@/utils/formValidation";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/app/redux/features/user/userSlice";
 
 function Login() {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const searchRoute = searchParams.get("redirect");
   const [errors, setErrors] = useState({});
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -44,6 +48,7 @@ function Login() {
       const result = await axiosInstance.post("/auth/login", formData);
       setIsLoading(false);
       notification.success({ message: "Login success" });
+      dispatch(setUser(result?.data?.data));
       if (searchRoute) {
         router.push(searchRoute);
       } else {
