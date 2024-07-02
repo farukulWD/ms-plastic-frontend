@@ -1,10 +1,8 @@
 "use client";
-
 import { Layout, Menu } from "antd";
 import React from "react";
 import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import getPath from "@/utils/getPath";
 
 const { Sider } = Layout;

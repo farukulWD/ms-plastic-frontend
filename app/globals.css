@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.ant-layout .ant-layout-sider {
+  background-color: #0e1111;
+}

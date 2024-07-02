@@ -10,7 +10,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import formValidation from "@/utils/formValidation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/app/redux/features/user/userSlice";
+import { setUser } from "@/app/redux/features/auth/authSlice";
 
 function Login() {
   const dispatch = useDispatch();
