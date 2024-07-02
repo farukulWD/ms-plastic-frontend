@@ -39,7 +39,7 @@ function InputElement({
               <label className="text-red-700">{errorMessage}</label>
             )}
             {type === "password" && (
-              <div className="absolute right-5 top-[15%]">
+              <div className="absolute right-5 top-[22%]">
                 {!showPassword ? (
                   <EyeOutlined
                     title="Show password"
