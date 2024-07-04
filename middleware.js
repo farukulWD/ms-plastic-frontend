@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const token = req.cookies.get("accessToken");
+  const token = req.cookies.get("refreshToken");
   if (token) {
     const decoded = jwtDecode(token?.value);
   }

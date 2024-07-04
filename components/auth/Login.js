@@ -11,10 +11,12 @@ import formValidation from "@/utils/formValidation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/redux/features/auth/authSlice";
+import { useLoginMutation } from "@/app/redux/features/auth/authApi";
+import { verifyToken } from "@/utils/verifyToken";
 
 function Login() {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const searchRoute = searchParams.get("redirect");
@@ -32,6 +34,8 @@ function Login() {
     }));
   };
 
+  const [login, { error, isLoading }] = useLoginMutation();
+
   const handleLogin = async () => {
     setErrors({});
     const rules = {
@@ -43,21 +47,10 @@ function Login() {
       setErrors(errors);
       return;
     }
-    try {
-      setIsLoading(true);
-      const result = await axiosInstance.post("/auth/login", formData);
-      setIsLoading(false);
-      notification.success({ message: "Login success" });
-      dispatch(setUser(result?.data?.data));
-      if (searchRoute) {
-        router.push(searchRoute);
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      setIsLoading(false);
-      ShowError(error);
-    }
+
+    const res = await login(formData).unwrap();
+    const user = verifyToken(res?.data?.accessToken);
+    dispatch(setUser({ user: user, token: res?.data?.accessToken }));
   };
 
   return (
