@@ -51,6 +51,11 @@ function Login() {
     const res = await login(formData).unwrap();
     const user = verifyToken(res?.data?.accessToken);
     dispatch(setUser({ user: user, token: res?.data?.accessToken }));
+    if (searchRoute) {
+      router.push(searchRoute);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
