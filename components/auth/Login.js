@@ -1,106 +1,89 @@
 "use client";
-import { notification } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import InputElement from "../common/InputElement";
 import PrimaryButton from "../common/PrimaryButton";
-import ShowError from "../common/ShowError";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
-import axiosInstance from "@/utils/axiosInstance";
-import formValidation from "@/utils/formValidation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/redux/features/auth/authSlice";
 import { useLoginMutation } from "@/app/redux/features/auth/authApi";
 import { verifyToken } from "@/utils/verifyToken";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 function Login() {
   const dispatch = useDispatch();
-  // const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const searchRoute = searchParams.get("redirect");
-  const [errors, setErrors] = useState({});
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+  const [login, { isLoading }] = useLoginMutation();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const handleLogin = async (data) => {
+    const toasterId = toast.loading("Logging in", { position: "top-center" });
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const [login, { error, isLoading }] = useLoginMutation();
-
-  const handleLogin = async () => {
-    setErrors({});
-    const rules = {
-      email: { required: true },
-      password: { required: true },
-    };
-    const { isValid, errors } = formValidation(formData, rules);
-    if (!isValid) {
-      setErrors(errors);
-      return;
-    }
-
-    const res = await login(formData).unwrap();
-    const user = verifyToken(res?.data?.accessToken);
-    dispatch(setUser({ user: user, token: res?.data?.accessToken }));
-    if (searchRoute) {
-      router.push(searchRoute);
-    } else {
+    try {
+      const res = await login(data).unwrap();
+      const user = verifyToken(res?.data?.accessToken);
+      dispatch(setUser({ user: user, token: res?.data?.accessToken }));
+      toast.success("Login success", {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
       router.push("/dashboard");
+    } catch (error) {
+      toast.error(error?.data?.message, {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="min:w-full md:min-w-[600px] p-[20px] rounded-lg bg-black-secondary items-center justify-center">
-        <div className="text-center ">
+        <div className="text-center">
           <h2 className="text-xl mb-2">Welcome Back</h2>
-          <h3 className="text-3xl ">Please Login here!</h3>
+          <h3 className="text-3xl">Please Login here!</h3>
         </div>
-        <div>
+        <form onSubmit={handleSubmit(handleLogin)}>
           <InputElement
             label={"Email"}
             name={"email"}
-            value={formData.email}
-            onChange={handleChange}
             placeholder={"Enter Email"}
-            errorMessage={errors?.email}
+            {...register("email", { required: true })}
+            errorMessage={errors?.email && "Email is required"}
           />
           <InputElement
             label={"Password"}
             name={"password"}
-            value={formData.password}
-            onChange={handleChange}
             placeholder={"Enter Password"}
             type="password"
-            errorMessage={errors?.password}
+            {...register("password", { required: true })}
+            errorMessage={errors?.password && "Password is required"}
           />
           <div className="mb-4">
             <Link
               className="dark:hover:text-indigo-500 text-white"
               href={"/auth/forgot-password"}
             >
-              Forgot your Password ?
+              Forgot your Password?
             </Link>
           </div>
 
           <PrimaryButton
-            onClick={handleLogin}
             title={"Login"}
             loading={isLoading}
             className={"w-full text-lg"}
+            type="submit"
           />
 
           <p className="mb-4">
-            Don't Have any account ?{" "}
+            Don't Have any account?{" "}
             <span>
               <Link
                 className="dark:hover:text-indigo-500 text-white"
@@ -110,7 +93,7 @@ function Login() {
               </Link>
             </span>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );

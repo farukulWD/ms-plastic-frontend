@@ -19,7 +19,7 @@ function SideBar() {
     {
       key: "2",
       icon: React.createElement(UserOutlined),
-      label: <Link href="dashboard/add-product">Add Product</Link>,
+      label: <Link href="/dashboard/add-product">Add Product</Link>,
     },
   ];
 
