@@ -12,10 +12,11 @@ const authApi = baseApi.injectEndpoints({
       },
     }),
     getAllUser: builder.query({
-      query: () => {
+      query: (query) => {
         return {
           url: "/user/users",
           method: "GET",
+          params: query,
         };
       },
     }),
