@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import InputElement from "../common/InputElement";
 import PrimaryButton from "../common/PrimaryButton";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -9,37 +8,34 @@ import { setUser } from "@/app/redux/features/auth/authSlice";
 import { useLoginMutation } from "@/app/redux/features/auth/authApi";
 import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";
-import { useForm, useFormContext } from "react-hook-form";
-import CustomFrom from "../form/CustomFrom";
-import CustomInput from "../form/CustomInput";
+import CustomForm from "../form/CustomForm";
+import InputElement from "../form/InputElement";
 
 function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const [login, { isLoading }] = useLoginMutation();
-
   const handleLogin = async (data) => {
-    console.log(data);
-    // const toasterId = toast.loading("Logging in", { position: "top-center" });
+    const toasterId = toast.loading("Logging in", { position: "top-center" });
 
-    // try {
-    //   const res = await login(data).unwrap();
-    //   const user = verifyToken(res?.data?.accessToken);
-    //   dispatch(setUser({ user: user, token: res?.data?.accessToken }));
-    //   toast.success("Login success", {
-    //     id: toasterId,
-    //     position: "top-center",
-    //     duration: 2000,
-    //   });
-    //   router.push("/dashboard");
-    // } catch (error) {
-    //   toast.error(error?.data?.message, {
-    //     id: toasterId,
-    //     position: "top-center",
-    //     duration: 2000,
-    //   });
-    // }
+    try {
+      const res = await login(data).unwrap();
+      const user = verifyToken(res?.data?.accessToken);
+      dispatch(setUser({ user: user, token: res?.data?.accessToken }));
+      toast.success("Login success", {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error(error?.data?.message, {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -49,9 +45,20 @@ function Login() {
           <h2 className="text-xl mb-2">Welcome Back</h2>
           <h3 className="text-3xl">Please Login here!</h3>
         </div>
-        <CustomFrom onSubmit={handleLogin}>
-          <CustomInput label={"Email"} name={"email"} type={"text"} />
-          <CustomInput label={"Password"} name={"password"} type="password" />
+
+        <CustomForm onSubmit={handleLogin}>
+          <InputElement
+            label={"Email"}
+            name={"email"}
+            type={"text"}
+            placeholder={"Type Your Email"}
+          />
+          <InputElement
+            label={"Password"}
+            name={"password"}
+            type="password"
+            placeholder={"Type your password"}
+          />
 
           <div className="mb-4">
             <Link
@@ -80,7 +87,7 @@ function Login() {
               </Link>
             </span>
           </p>
-        </CustomFrom>
+        </CustomForm>
       </div>
     </div>
   );

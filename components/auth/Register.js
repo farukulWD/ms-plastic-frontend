@@ -3,78 +3,41 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import PrimaryButton from "../common/PrimaryButton";
-import InputElement from "../common/InputElement";
 import axiosInstance from "@/utils/axiosInstance";
 import formValidation from "@/utils/formValidation";
 import { useRouter } from "next/navigation";
 import { notification } from "antd";
 import ShowError from "../common/ShowError";
+import InputElement from "../form/InputElement";
+import CustomForm from "../form/CustomForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    mobile: null,
-    profilePicture: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((pre) => ({
-      ...pre,
-      [name]: value,
-    }));
+  const handleRegister = async (data) => {
+    console.log(data);
   };
 
-  useEffect(() => {
-    if (formData.password !== formData.confirmPassword) {
-      setErrors((pre) => ({
-        ...pre,
-        confirmPassword: "Passwords do not match",
-      }));
-    } else {
-      setErrors((pre) => {
-        const { confirmPassword, ...rest } = pre;
-        return rest;
-      });
-    }
-  }, [formData.password, formData.confirmPassword]);
-
-  const handleRegister = async () => {
-    setErrors({});
-    const rules = {
-      name: { required: true },
-      email: { required: true },
-      password: { required: true },
-      mobile: { required: true },
-      profilePicture: { required: true },
-    };
-
-    const { isValid, errors: validationErrors } = formValidation(
-      formData,
-      rules
-    );
-    if (!isValid) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const result = await axiosInstance.post("/user/create-user", formData);
-      notification.success({ message: "Register has been success" });
-      router.push("/auth/login");
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      ShowError(error);
-    }
-  };
+  const registerFromResolver = z
+    .object({
+      name: z.string({ required_error: "Name is required" }),
+      email: z
+        .string({ required_error: "Email is required" })
+        .email({ message: "This is not a valid email." }),
+      password: z.string({ required_error: "Password is required" }),
+      confirmPassword: z.string({
+        required_error: "Confirm Password is required",
+      }),
+      mobile: z.string({ required_error: "Mobile is required" }),
+      profilePicture: z.string().optional(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ["confirmPassword"],
+    });
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
@@ -84,70 +47,32 @@ function Register() {
           <h3 className="text-3xl">Please Register here!</h3>
         </div>
 
-        <div>
-          <InputElement
-            label={"Name"}
-            name={"name"}
-            value={formData.name}
-            onChange={handleChange}
-            placeholder={"Enter your name"}
-            errorMessage={errors?.name}
-            type="text"
-          />
-          <InputElement
-            label={"Email"}
-            name={"email"}
-            value={formData.email}
-            onChange={handleChange}
-            placeholder={"Enter Email"}
-            errorMessage={errors?.email}
-            type="text"
-          />
-          <InputElement
-            label={"Password"}
-            name={"password"}
-            value={formData.password}
-            onChange={handleChange}
-            placeholder={"Enter Password"}
-            type="password"
-            errorMessage={errors?.password}
-          />
+        <CustomForm
+          onSubmit={handleRegister}
+          resolver={zodResolver(registerFromResolver)}
+        >
+          <InputElement label={"Name"} name={"name"} type="text" />
+          <InputElement label={"Email"} name={"email"} type="text" />
+          <InputElement label={"Password"} name={"password"} type="password" />
           <InputElement
             label={"Confirm Password"}
             name={"confirmPassword"}
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder={"Enter confirm password"}
             type="password"
-            errorMessage={errors?.confirmPassword}
           />
-          <InputElement
-            label={"Mobile Number"}
-            name={"mobile"}
-            value={formData.mobile}
-            onChange={handleChange}
-            placeholder={"Enter Your Phone Number"}
-            type="number"
-            errorMessage={errors?.mobile}
-          />
+          <InputElement label={"Mobile Number"} name={"mobile"} type="number" />
           <InputElement
             label={"Profile picture"}
             name={"profilePicture"}
-            value={formData.profilePicture}
-            onChange={handleChange}
-            placeholder={"Profile picture"}
             type="text"
-            errorMessage={errors?.profilePicture}
           />
 
           <PrimaryButton
-            onClick={handleRegister}
             title={"Register"}
             loading={isLoading}
             className={"w-full text-lg"}
           />
 
-          <p className="mb-4">
+          <p className="mb-4 text-white">
             You have already an account ?{" "}
             <span>
               <Link
@@ -158,7 +83,7 @@ function Register() {
               </Link>
             </span>
           </p>
-        </div>
+        </CustomForm>
       </div>
     </div>
   );
