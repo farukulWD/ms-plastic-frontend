@@ -20,6 +20,15 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    forgotPassword: builder.mutation({
+      query: (email) => {
+        return {
+          url: "/auth/forget-password",
+          method: "POST",
+          body: email,
+        };
+      },
+    }),
     getAllUser: builder.query({
       query: (query) => {
         return {
@@ -32,5 +41,9 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useGetAllUserQuery } =
-  authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useForgotPasswordMutation,
+  useGetAllUserQuery,
+} = authApi;

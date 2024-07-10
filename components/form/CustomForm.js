@@ -2,7 +2,12 @@ import { Form } from "antd";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-export default function CustomForm({ onSubmit, children, resolver }) {
+export default function CustomForm({
+  onSubmit,
+  children,
+  resolver,
+  className,
+}) {
   const fromConfig = {};
   if (resolver) {
     fromConfig["resolver"] = resolver;
@@ -11,7 +16,11 @@ export default function CustomForm({ onSubmit, children, resolver }) {
 
   return (
     <FormProvider {...methods}>
-      <Form layout="vertical" onFinish={methods.handleSubmit(onSubmit)}>
+      <Form
+        className={className}
+        layout="vertical"
+        onFinish={methods.handleSubmit(onSubmit)}
+      >
         {children}
       </Form>
     </FormProvider>

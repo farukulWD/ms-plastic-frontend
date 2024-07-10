@@ -43,12 +43,12 @@ export default function InputElement({
               )}
               beforeUpload={(file) => {
                 field.onChange(file);
-                return false; // Prevent automatic upload
+                return false;
               }}
               showUploadList={false}
             >
               <Button className="text-white bg-gray-700 border-none hover:bg-gray-600">
-                Click to Upload
+                Profile picture
               </Button>
             </Upload>
           ) : (

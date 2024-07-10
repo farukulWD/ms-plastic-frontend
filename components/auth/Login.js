@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import PrimaryButton from "../common/PrimaryButton";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,12 +10,23 @@ import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";
 import CustomForm from "../form/CustomForm";
 import InputElement from "../form/InputElement";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ForgotPassword from "@/components/auth/ForgotPassword";
 
 function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
-
   const [login, { isLoading }] = useLoginMutation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const loginResolver = z.object({
+    email: z
+      .string({ required_error: "Email is required" })
+      .email({ message: "This is not a valid email." }),
+    password: z.string({ required_error: "Password is required" }),
+  });
+
   const handleLogin = async (data) => {
     const toasterId = toast.loading("Logging in", { position: "top-center" });
 
@@ -46,7 +57,10 @@ function Login() {
           <h3 className="text-3xl">Please Login here!</h3>
         </div>
 
-        <CustomForm onSubmit={handleLogin}>
+        <CustomForm
+          resolver={zodResolver(loginResolver)}
+          onSubmit={handleLogin}
+        >
           <InputElement
             label={"Email"}
             name={"email"}
@@ -61,12 +75,12 @@ function Login() {
           />
 
           <div className="mb-4">
-            <Link
-              className="dark:hover:text-indigo-500 text-white"
-              href={"/auth/forgot-password"}
+            <p
+              className="dark:hover:text-indigo-500 text-white cursor-pointer"
+              onClick={() => setIsOpen(true)}
             >
               Forgot your Password?
-            </Link>
+            </p>
           </div>
 
           <PrimaryButton
@@ -89,6 +103,8 @@ function Login() {
           </p>
         </CustomForm>
       </div>
+
+      <ForgotPassword isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
