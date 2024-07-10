@@ -12,16 +12,36 @@ import InputElement from "../form/InputElement";
 import CustomForm from "../form/CustomForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import FileInput from "../form/FileInput";
+import { useRegisterMutation } from "@/app/redux/features/auth/authApi";
+import { toast } from "sonner";
 
 function Register() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const [register, { isLoading }] = useRegisterMutation();
   const handleRegister = async (data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", data.profilePicture);
+    const toasterId = toast.loading("creating", { position: "top-center" });
+    try {
+      await register(formData).unwrap();
+      toast.success("User register success", {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
+      router.push("/auth/login");
+    } catch (error) {
+      toast.error(error?.data?.message, {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
+    }
   };
 
-  const registerFromResolver = z
+  const registerFormResolver = z
     .object({
       name: z.string({ required_error: "Name is required" }),
       email: z
@@ -32,7 +52,7 @@ function Register() {
         required_error: "Confirm Password is required",
       }),
       mobile: z.string({ required_error: "Mobile is required" }),
-      profilePicture: z.string().optional(),
+      profilePicture: z.instanceof(File).optional(),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords don't match",
@@ -49,7 +69,7 @@ function Register() {
 
         <CustomForm
           onSubmit={handleRegister}
-          resolver={zodResolver(registerFromResolver)}
+          resolver={zodResolver(registerFormResolver)}
         >
           <InputElement label={"Name"} name={"name"} type="text" />
           <InputElement label={"Email"} name={"email"} type="text" />
@@ -60,10 +80,10 @@ function Register() {
             type="password"
           />
           <InputElement label={"Mobile Number"} name={"mobile"} type="number" />
-          <InputElement
+          <FileInput
+            className={"w-full"}
             label={"Profile picture"}
             name={"profilePicture"}
-            type="text"
           />
 
           <PrimaryButton

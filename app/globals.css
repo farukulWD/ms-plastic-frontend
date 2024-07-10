@@ -42,6 +42,10 @@ select:-webkit-autofill:focus {
   color: white;
 }
 
+.ant-upload-wrapper .ant-upload-select {
+  display: block;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
