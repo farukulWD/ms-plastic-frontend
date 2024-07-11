@@ -1,0 +1,14 @@
+.ant-layout .ant-layout-sider {
+  background-color: #0e1111;
+}
+
+.ant-upload-wrapper .ant-upload-select {
+  display: block;
+}
+
+.ant-upload-list-item {
+  @apply text-white;
+  .anticon {
+    @apply text-white;
+  }
+}

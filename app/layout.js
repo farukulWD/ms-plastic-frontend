@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "../styles/main.scss";
 
 import dynamic from "next/dynamic";
 import { Providers } from "./redux/provider";

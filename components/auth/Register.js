@@ -58,8 +58,8 @@ function Register() {
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="min:w-full md:min-w-[600px] p-[20px] rounded-lg bg-black-secondary items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl mb-2">Welcome Back</h2>
-          <h3 className="text-3xl">Please Register here!</h3>
+          <h2 className="text-xl text-white mb-2">Welcome Back</h2>
+          <h3 className="text-3xl text-white">Please Register here!</h3>
         </div>
 
         <CustomForm
@@ -79,6 +79,8 @@ function Register() {
             className={"w-full"}
             label={"Profile picture"}
             name={"profilePicture"}
+            accept={".png,.jpg,.jpeg"}
+            maxCount={1}
           />
 
           <PrimaryButton
