@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PrimaryButton from "../common/PrimaryButton";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,12 +13,23 @@ import InputElement from "../form/InputElement";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ForgotPassword from "@/components/auth/ForgotPassword";
+import { useGetUserQuery } from "@/app/redux/features/userManagement/userApi";
 
 function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+
+  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(
+    userId,
+    {
+      skip: !userId,
+    }
+  );
 
   const loginResolver = z.object({
     email: z
@@ -32,14 +43,22 @@ function Login() {
 
     try {
       const res = await login(data).unwrap();
-      const user = verifyToken(res?.data?.accessToken);
-      dispatch(setUser({ user: user, token: res?.data?.accessToken }));
-      toast.success("Login success", {
-        id: toasterId,
-        position: "top-center",
-        duration: 2000,
-      });
-      router.push("/dashboard");
+      if (res?.error) {
+        toast.error(res.error.data.message, { id: toasterId });
+      } else {
+        const user = verifyToken(res?.data?.accessToken);
+
+        if (user) {
+          setUserId(user?.userId);
+          setAccessToken(res?.data?.accessToken);
+        }
+
+        toast.success("Login success", {
+          position: "top-center",
+          duration: 2000,
+          id: toasterId,
+        });
+      }
     } catch (error) {
       toast.error(error?.data?.message, {
         id: toasterId,
@@ -48,6 +67,13 @@ function Login() {
       });
     }
   };
+
+  useEffect(() => {
+    if (userData && !isUserFetching && accessToken) {
+      dispatch(setUser({ user: userData?.data, token: accessToken }));
+      router.push("/dashboard");
+    }
+  }, [userData, isUserFetching, accessToken]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">

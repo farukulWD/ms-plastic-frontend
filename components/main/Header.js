@@ -1,11 +1,12 @@
 "use client";
-import { Layout } from "antd";
+import { Flex, Layout } from "antd";
 import React, { useEffect } from "react";
 import PrimaryButton from "../common/PrimaryButton";
 import RemoveCookie from "../common/RemoveCookie";
 import { logOut } from "@/app/redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 const { Header } = Layout;
 
 export default function DashboardHeader() {
@@ -24,11 +25,21 @@ export default function DashboardHeader() {
       return;
     }
   }, []);
-  const { name } = user;
+  const { name, profilePicture } = user;
   return (
     <Header className="bg-black-primary flex items-center w-full ">
       <div className="flex  w-full items-center justify-between">
-        <p className="text-2xl font-semibold text-white">{name}</p>
+        <Flex align="center" gap={8}>
+          <Image
+            src={profilePicture}
+            height={32}
+            width={32}
+            className="h-8 w-8 rounded-full"
+            alt={name}
+          />
+          <p className="text-2xl font-semibold text-white">{name}</p>
+        </Flex>
+
         <PrimaryButton
           onClick={handleLogOut}
           className="dark:text-red-500"
