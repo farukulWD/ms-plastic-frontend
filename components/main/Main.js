@@ -7,7 +7,7 @@ const { Content, Footer } = Layout;
 
 const Main = ({ children }) => {
   return (
-    <Layout className="min-h-screen ">
+    <Layout style={{ height: "100%" }}>
       <SideBar />
       <Layout>
         <DashboardHeader></DashboardHeader>
