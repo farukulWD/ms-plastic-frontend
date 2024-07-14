@@ -13,8 +13,9 @@ const Main = ({ children }) => {
         <DashboardHeader></DashboardHeader>
         <Content
           style={{
-            margin: "24px 16px 0",
+            padding: "24px 16px 0",
           }}
+          className="bg-black-secondary"
         >
           <div className="h-full">{children}</div>
         </Content>
@@ -22,6 +23,7 @@ const Main = ({ children }) => {
           style={{
             textAlign: "center",
           }}
+          className="bg-black-secondary text-white"
         >
           Created by Farukul Islam ©{new Date().getFullYear()}
         </Footer>

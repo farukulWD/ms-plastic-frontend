@@ -27,20 +27,10 @@ export const addminRout = [
   },
   {
     name: "Order Managment",
-    children: [
-      {
-        name: "Add Produt",
-        path: "/add-product",
-      },
-    ],
+    children: [],
   },
   {
     name: "Cart Managment",
-    children: [
-      {
-        name: "Add Produt",
-        path: "/add-product",
-      },
-    ],
+    children: [],
   },
 ];

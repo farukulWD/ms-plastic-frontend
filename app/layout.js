@@ -5,6 +5,7 @@ import "../styles/main.scss";
 import dynamic from "next/dynamic";
 import { Providers } from "./redux/provider";
 import { Toaster } from "sonner";
+import AntConfigProvider from "@/components/common/antdDesignConfig/AntConfigProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          {children}
+          <AntConfigProvider>{children}</AntConfigProvider>
+
           <Toaster richColors />
         </Providers>
       </body>

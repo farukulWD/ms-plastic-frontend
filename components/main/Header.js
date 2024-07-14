@@ -27,7 +27,7 @@ export default function DashboardHeader() {
   }, []);
   const { name, profilePicture } = user;
   return (
-    <Header className="bg-black-primary flex items-center w-full ">
+    <Header className="flex items-center w-full ">
       <div className="flex  w-full items-center justify-between">
         <Flex align="center" gap={8}>
           <Image

@@ -1,16 +1,13 @@
 "use client";
 import { Layout, Menu } from "antd";
 import React from "react";
-import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import getPath from "@/utils/getPath";
+
 import { sidebarItemsGenerator } from "@/utils/sidebarItemsGenerator";
 import { addminRout } from "../routes/admin.routes";
 
 const { Sider } = Layout;
 
 function SideBar() {
-  console.log(sidebarItemsGenerator(addminRout, "dashboard", "admin"));
   return (
     <Sider
       breakpoint="lg"
@@ -23,7 +20,6 @@ function SideBar() {
         <h2 className="text-2xl text-white font-semibold">MS Plastic</h2>
       </div>
       <Menu
-        className="bg-black-primary"
         theme="dark"
         mode="inline"
         items={sidebarItemsGenerator(addminRout, "dashboard", "admin")}

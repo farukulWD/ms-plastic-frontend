@@ -9,14 +9,20 @@ export default function InputElement({
   type = "text",
   label,
   className,
+  placeholder,
 }) {
   return (
     <Controller
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <Form.Item label={<span className="text-white text-sm">{label}</span>}>
+        <Form.Item
+          label={
+            label ? <span className="text-white text-sm">{label}</span> : null
+          }
+        >
           {type === "password" ? (
             <Input.Password
+              placeholder={placeholder}
               className={cn(
                 "outline-none border-none placeholder-gray-400 text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 focus-within:bg-gray-700 ",
                 className
@@ -34,29 +40,13 @@ export default function InputElement({
                 )
               }
             />
-          ) : type === "file" ? (
-            <Upload
-              {...field}
-              className={cn(
-                "outline-none placeholder:text-gray-400 border-none text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 focus-within:bg-gray-700",
-                className
-              )}
-              beforeUpload={(file) => {
-                field.onChange(file);
-                return false;
-              }}
-              showUploadList={false}
-            >
-              <Button className="text-white bg-gray-700 border-none hover:bg-gray-600">
-                Profile picture
-              </Button>
-            </Upload>
           ) : (
             <Input
               className={cn(
                 "outline-none placeholder:text-gray-400 border-none text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 focus-within:bg-gray-700",
                 className
               )}
+              placeholder={placeholder}
               {...field}
               id={name}
             />
