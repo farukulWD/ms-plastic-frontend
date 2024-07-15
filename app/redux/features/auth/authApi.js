@@ -56,6 +56,15 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    deleteUser: builder.mutation({
+      query: (id) => {
+        return {
+          url: "/user/delete-user",
+          method: "DELETE",
+          body: id,
+        };
+      },
+    }),
   }),
 });
 
@@ -66,4 +75,5 @@ export const {
   useGetAllUserQuery,
   useResetPasswordMutation,
   useUpdateRoleMutation,
+  useDeleteUserMutation,
 } = authApi;

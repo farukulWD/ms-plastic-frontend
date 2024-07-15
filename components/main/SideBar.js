@@ -15,6 +15,7 @@ function SideBar() {
       onBreakpoint={(broken) => {}}
       onCollapse={(collapsed, type) => {}}
       style={{ height: "100vh", position: "sticky", top: "0", left: "0" }}
+      className="z-10"
     >
       <div className="demo-logo-vertical h-[64px] flex items-center justify-center flex-col">
         <h2 className="text-2xl text-white font-semibold">MS Plastic</h2>

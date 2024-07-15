@@ -1,5 +1,6 @@
 "use client";
 import {
+  useDeleteUserMutation,
   useGetAllUserQuery,
   useUpdateRoleMutation,
 } from "@/app/redux/features/auth/authApi";
@@ -13,7 +14,16 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Space, Table, Tooltip, Pagination, Avatar } from "antd";
+import {
+  Col,
+  Row,
+  Space,
+  Table,
+  Tooltip,
+  Pagination,
+  Avatar,
+  Popconfirm,
+} from "antd";
 import dayjs from "dayjs";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -25,18 +35,19 @@ export default function Admin() {
   const [limit, setLimit] = useState(10);
   const [editRoleModalOpen, setEditRoleModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-
   const [updateRole, { data: upadatData, isSuccess }] = useUpdateRoleMutation();
-
-  const handleEditShow = (record) => {
-    setSelected(record);
-    setEditRoleModalOpen(true);
-  };
+  const [deleteUser, { isSuccess: successDelete }] = useDeleteUserMutation();
   const { data, isLoading, refetch } = useGetAllUserQuery({
     page,
     limit,
     ...filters,
   });
+
+  const handleEditShow = (record) => {
+    setSelected(record);
+    setEditRoleModalOpen(true);
+  };
+
   const hanldeRoleEdit = async (data) => {
     const toasterId = toast.loading("Upadating role", {
       position: "top-center",
@@ -53,6 +64,31 @@ export default function Admin() {
       setSelected(null);
       setEditRoleModalOpen(false);
       refetch();
+    } catch (error) {
+      toast.error(error?.data?.message, {
+        id: toasterId,
+        position: "top-center",
+        duration: 2000,
+      });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const toasterId = toast.loading("Deleting", { position: "top-center" });
+    try {
+      const res = await deleteUser({ id: id });
+      if (!res?.error) {
+        toast.success("User deleted Success", {
+          id: toasterId,
+          position: "top-center",
+        });
+        refetch();
+      } else {
+        toast.error(res?.error?.data?.message, {
+          id: toasterId,
+          position: "top-center",
+        });
+      }
     } catch (error) {
       toast.error(error?.data?.message, {
         id: toasterId,
@@ -91,6 +127,13 @@ export default function Admin() {
       dataIndex: "email",
     },
     {
+      title: "User status",
+      dataIndex: "isDeleted",
+      render: (isDelete) => (
+        <Space>{!isDelete ? <span>Active</span> : <span>Inactive</span>}</Space>
+      ),
+    },
+    {
       title: "Mobile",
       dataIndex: "mobile",
     },
@@ -125,7 +168,16 @@ export default function Admin() {
             />
           </Tooltip>
           <Tooltip title="Delete This user">
-            <DeleteOutlined className="cursor-pointer text-red-500" size={30} />
+            <Popconfirm
+              title="Are you sure!"
+              description="Do you want to delete this user"
+              onConfirm={() => handleDelete(record?._id)}
+            >
+              <DeleteOutlined
+                className="cursor-pointer text-red-500"
+                size={30}
+              />
+            </Popconfirm>
           </Tooltip>
         </Space>
       ),
@@ -134,7 +186,7 @@ export default function Admin() {
 
   const handleFilter = (data) => {
     setFilters(data);
-    setPage(1); // Reset to first page when filters change
+    setPage(1);
   };
 
   const handlePageChange = (page, pageSize) => {
@@ -218,7 +270,11 @@ export default function Admin() {
         title={"Edit User Role"}
         mask={false}
       >
-        <CustomForm onSubmit={hanldeRoleEdit} className="pt-5">
+        <CustomForm
+          onSubmit={hanldeRoleEdit}
+          defaultValues={{ role: selected?.role }}
+          className="pt-5"
+        >
           <SelectElement
             options={roleOption}
             name={"role"}

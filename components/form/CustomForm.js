@@ -6,13 +6,19 @@ export default function CustomForm({
   onSubmit,
   children,
   resolver,
+  defaultValues,
   className,
 }) {
-  const fromConfig = {};
+  const formConfig = {};
   if (resolver) {
-    fromConfig["resolver"] = resolver;
+    formConfig["resolver"] = resolver;
   }
-  const methods = useForm(fromConfig);
+
+  if (defaultValues) {
+    formConfig["defaultValues"] = defaultValues;
+  }
+
+  const methods = useForm(formConfig);
 
   return (
     <FormProvider {...methods}>
