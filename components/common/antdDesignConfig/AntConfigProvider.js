@@ -10,6 +10,7 @@ function AntConfigProvider({ children }) {
         token: {
           colorBgContainer: "#181823",
           colorText: "white",
+          colorBgElevated: "#181823",
         },
         components: {
           Table: {
@@ -26,6 +27,12 @@ function AntConfigProvider({ children }) {
             darkItemSelectedBg: "#060608",
             darkSubMenuItemBg: "#181823",
           },
+          Select: {
+            optionActiveBg: "#4E4FEB",
+            optionSelectedBg: "#4E4FEB",
+            selectorBg: "#374151",
+          },
+          Dropdown: {},
         },
       }}
     >

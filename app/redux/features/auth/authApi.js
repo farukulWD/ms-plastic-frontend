@@ -47,6 +47,15 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateRole: builder.mutation({
+      query: (userInfo) => {
+        return {
+          url: "/user/update-user-role",
+          method: "PATCH",
+          body: userInfo,
+        };
+      },
+    }),
   }),
 });
 
@@ -56,4 +65,5 @@ export const {
   useForgotPasswordMutation,
   useGetAllUserQuery,
   useResetPasswordMutation,
+  useUpdateRoleMutation,
 } = authApi;

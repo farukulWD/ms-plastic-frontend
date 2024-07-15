@@ -54,7 +54,7 @@ export default function ResetPasswordCom() {
       path: ["confirmPassword"],
     });
   return (
-    <div className="min:w-full md:min-w-[600px] p-[20px] rounded-lg bg-black-secondary items-center justify-center">
+    <div className="min:w-full md:min-w-[600px] border border-blue-color p-[20px] rounded-lg bg-black-secondary items-center justify-center">
       <div className="text-center">
         <h2 className="text-xl text-white mb-2">Reset</h2>
         <h3 className="text-3xl text-white">Your Password Here!</h3>
