@@ -15,7 +15,7 @@ const SelectElement = ({ label, name, options, className }) => {
           <Select
             variant="borderless"
             className={cn(
-              "outline-none border-none placeholder-gray-400 text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 focus-within:bg-gray-700 ",
+              "outline-none border-none placeholder-gray-400 text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-2 h-full w-full bg-gray-700 focus-within:bg-gray-700 ",
               className
             )}
             style={{ width: "100%" }}

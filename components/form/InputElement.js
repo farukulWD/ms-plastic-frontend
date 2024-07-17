@@ -49,6 +49,7 @@ export default function InputElement({
               placeholder={placeholder}
               {...field}
               id={name}
+              type={type}
             />
           )}
 

@@ -1,4 +1,4 @@
-const { baseApi } = require("../baseApi/baseApi");
+import { baseApi } from "../baseApi/baseApi";
 
 const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -6,7 +6,7 @@ const productsApi = baseApi.injectEndpoints({
       query: (productInfo) => {
         return {
           url: "/product/add-product",
-          methot: "POST",
+          method: "POST",
           body: productInfo,
         };
       },
