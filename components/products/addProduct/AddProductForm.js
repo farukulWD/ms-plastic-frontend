@@ -15,82 +15,83 @@ function AddProductForm() {
   const { user } = useSelector((state) => state.user);
   const [addProduct, { isLoading }] = useAddProductMutation();
 
+  const addProductResolver = z.object({
+    code: z.string({ required_error: "Code is required" }),
+    name: z.string({ required_error: "Product name is required" }),
+    groupName: z.string({ required_error: "Group name is required" }),
+    price: z.coerce.number({ required_error: "Price is required" }),
+    company: z.string({ required_error: "Company Name is required" }),
+    quantity: z.coerce.number({ required_error: "Quantity is required" }),
+  });
+
   const handleAddproduct = async (data) => {
-    const toasterId = toast.loading("Creating Product", {
-      position: "top-center",
-    });
+    const toasterId = toast("Adding Product", { position: "top-center" });
     data.addedBy = user?._id;
     try {
-      const res = await addProduct(data).unwrap();
-      if (res.error) {
-        toast.error(res?.error?.data?.message, {
-          id: toasterId,
+      const res = await addProduct(data);
+      if (res?.error) {
+        toast.error(res?.error.data?.message, {
+          duration: 2000,
           position: "top-center",
+          id: toasterId,
         });
       } else {
-        toast.success("Product Created Successfully", {
-          id: toasterId,
-          position: "top-center",
+        toast.success("Product added success", {
           duration: 2000,
+          position: "top-center",
+          id: toasterId,
         });
       }
     } catch (error) {
-      toast.error(error?.data?.message, {
-        id: toasterId,
-        position: "top-center",
+      toast.error(error.data?.message, {
         duration: 2000,
+        position: "top-center",
+        id: toasterId,
       });
     }
   };
 
-  const groupOptions = [{ label: "Pride", value: "pride" }];
-
-  const companyOptions = [
-    { label: "RFL", value: "rfl" },
-    { label: "TELHH", value: "TELHH" },
-    { label: "TELFF", value: "TELFF" },
+  const groupOptions = [
+    { label: "Pride", value: "pride" },
+    { label: "tel-household", value: "tel-household" },
+    { label: "pacific", value: "pacific" },
+    { label: "prominet", value: "prominent" },
+    { label: "tel-furniture", value: "tel-furniture" },
   ];
 
-  const addProductResolver = z.object({
-    name: z.string({ required_error: "Name is required" }),
-    code: z.string({ required_error: "Code is required" }),
-    groupName: z.string({ required_error: "Group name is required" }),
-    price: z.string({ required_error: "Price is required" }),
-    company: z.string({ required_error: "Company is required" }),
-    quantity: z.string({ required_error: "Quantity is required" }),
-    addedBy: z.string({ required_error: "Added By is required" }),
-  });
+  const companyOptions = [
+    { label: "RFL", value: "RFL" },
+    { label: "TEL", value: "TEL" },
+  ];
 
   return (
     <Row className="max-w-[600px] mx-auto border p-6 rounded-lg border-blue-color">
       <Col span={24}>
         <CustomForm
-          onSubmit={handleAddproduct}
           resolver={zodResolver(addProductResolver)}
+          onSubmit={handleAddproduct}
         >
           <InputElement name="code" label="Code" />
-          <InputElement name="name" type="text" label="Product Name" />
+          <InputElement name={"name"} label={"Product Name"} />
           <SelectElement
-            name="groupName"
-            label="Group Name"
+            name={"groupName"}
+            label={"Group Name"}
             options={groupOptions}
           />
-          <InputElement name="price" type="number" label="Product Price" />
+          <InputElement name={"price"} label={"Product Price"} type="number" />
           <SelectElement
-            name="company"
-            label="Company Name"
+            name={"company"}
+            label={"Company"}
             options={companyOptions}
           />
-          <InputElement
-            name="quantity"
-            type="number"
-            label="Product Quantity"
-          />
+          <InputElement name={"quantity"} label={"Quantity"} type="number" />
           <Form.Item>
             <PrimaryButton
               type="submit"
               title="Add Product"
               className="w-full"
+              loading={isLoading}
+              disable={isLoading}
             />
           </Form.Item>
         </CustomForm>
