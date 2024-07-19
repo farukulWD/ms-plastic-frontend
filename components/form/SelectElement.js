@@ -2,7 +2,7 @@ import cn from "@/utils/cn";
 import { Form, Select } from "antd";
 import { Controller } from "react-hook-form";
 
-const SelectElement = ({ label, name, options, className }) => {
+const SelectElement = ({ label, name, options, className, placeholder }) => {
   return (
     <Controller
       name={name}
@@ -22,6 +22,7 @@ const SelectElement = ({ label, name, options, className }) => {
             {...field}
             options={options}
             size="large"
+            placeholder={placeholder}
           />
           {error && <small className="text-red-500">{error.message}</small>}
         </Form.Item>

@@ -4,6 +4,7 @@ import PrimaryButton from "@/components/common/PrimaryButton";
 import CustomForm from "@/components/form/CustomForm";
 import InputElement from "@/components/form/InputElement";
 import SelectElement from "@/components/form/SelectElement";
+import { companyOptions, groupOptions } from "@/utils/all-options/options";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Col, Form, Row } from "antd";
 import React from "react";
@@ -50,19 +51,6 @@ function AddProductForm() {
       });
     }
   };
-
-  const groupOptions = [
-    { label: "Pride", value: "pride" },
-    { label: "tel-household", value: "tel-household" },
-    { label: "pacific", value: "pacific" },
-    { label: "prominet", value: "prominent" },
-    { label: "tel-furniture", value: "tel-furniture" },
-  ];
-
-  const companyOptions = [
-    { label: "RFL", value: "RFL" },
-    { label: "TEL", value: "TEL" },
-  ];
 
   return (
     <Row className="max-w-[600px] mx-auto border p-6 rounded-lg border-blue-color">
