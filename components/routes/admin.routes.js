@@ -23,6 +23,10 @@ export const addminRout = [
         name: "Add Produt",
         path: "/add-product",
       },
+      {
+        name: "All Produts",
+        path: "/all-products",
+      },
     ],
   },
   {

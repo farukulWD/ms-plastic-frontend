@@ -11,7 +11,16 @@ const productsApi = baseApi.injectEndpoints({
         };
       },
     }),
+    allProducts: builder.query({
+      query: (arg) => {
+        return {
+          url: "/product/get-products",
+          method: "GET",
+          params: arg,
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddProductMutation } = productsApi;
+export const { useAddProductMutation, useAllProductsQuery } = productsApi;
