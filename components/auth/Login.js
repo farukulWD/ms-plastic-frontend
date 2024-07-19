@@ -93,7 +93,12 @@ function Login() {
             type={"text"}
             placeholder={"Type Your Email"}
           />
-          <InputElement label={"Password"} name={"password"} type="password" />
+          <InputElement
+            label={"Password"}
+            name={"password"}
+            placeholder={"Password"}
+            type="password"
+          />
 
           <div className="mb-4">
             <p

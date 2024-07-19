@@ -11,6 +11,7 @@ function AntConfigProvider({ children }) {
           colorBgContainer: "#181823",
           colorText: "white",
           colorBgElevated: "#181823",
+          colorTextPlaceholder: "#9ca3af",
         },
         components: {
           Table: {

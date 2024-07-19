@@ -66,15 +66,36 @@ function Register() {
           onSubmit={handleRegister}
           resolver={zodResolver(registerFormResolver)}
         >
-          <InputElement label={"Name"} name={"name"} type="text" />
-          <InputElement label={"Email"} name={"email"} type="text" />
-          <InputElement label={"Password"} name={"password"} type="password" />
+          <InputElement
+            label={"Name"}
+            placeholder={"Type your name"}
+            name={"name"}
+            type="text"
+          />
+          <InputElement
+            label={"Email"}
+            name={"email"}
+            type="text"
+            placeholder={"Email"}
+          />
+          <InputElement
+            label={"Password"}
+            name={"password"}
+            type="password"
+            placeholder={"Password"}
+          />
           <InputElement
             label={"Confirm Password"}
             name={"confirmPassword"}
             type="password"
+            placeholder={"Confirm Placeholder"}
           />
-          <InputElement label={"Mobile Number"} name={"mobile"} type="number" />
+          <InputElement
+            label={"Mobile Number"}
+            name={"mobile"}
+            type="number"
+            placeholder={"Mobile number"}
+          />
           <FileInput
             className={"w-full"}
             label={"Profile picture"}

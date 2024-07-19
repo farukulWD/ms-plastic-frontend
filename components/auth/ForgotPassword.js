@@ -49,7 +49,7 @@ function ForgotPassword({ isOpen, setIsOpen }) {
         resolver={zodResolver(forgotResolver)}
         className="pt-5"
       >
-        <InputElement name={"email"} label={"Email"} />
+        <InputElement name={"email"} label={"Email"} placeholder={"Email"} />
 
         <PrimaryButton
           className={"w-full"}

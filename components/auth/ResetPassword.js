@@ -60,16 +60,23 @@ export default function ResetPasswordCom() {
         <h3 className="text-3xl text-white">Your Password Here!</h3>
       </div>
       <CustomForm onSubmit={handleReset} resolver={zodResolver(resetResolver)}>
-        <InputElement name="email" label={"Email"} type="text" />
+        <InputElement
+          name="email"
+          label={"Email"}
+          type="text"
+          placeholder={"Email"}
+        />
         <InputElement
           name={"password"}
           label={"New Password"}
           type="password"
+          placeholder={"Password"}
         />
         <InputElement
           name={"confirmPassword"}
           label={"Confirm Password"}
           type="password"
+          placeholder={"Confirm Password"}
         />
 
         <PrimaryButton
