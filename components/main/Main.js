@@ -1,11 +1,21 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout } from "antd";
 import SideBar from "./SideBar";
 import DashboardHeader from "./Header";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 const { Content, Footer } = Layout;
 
 const Main = ({ children }) => {
+  const Router = useRouter();
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      Router.push(`/dashboard/${user?.role}`);
+    }
+  }, [user]);
   return (
     <Layout style={{ height: "100%" }}>
       <SideBar />

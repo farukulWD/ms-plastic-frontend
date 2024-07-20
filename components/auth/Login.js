@@ -71,7 +71,7 @@ function Login() {
   useEffect(() => {
     if (userData && !isUserFetching && accessToken) {
       dispatch(setUser({ user: userData?.data, token: accessToken }));
-      router.push("/dashboard");
+      router.push(`/dashboard/${userData?.data?.role}`);
     }
   }, [userData, isUserFetching, accessToken]);
 
