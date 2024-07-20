@@ -5,8 +5,23 @@ import CustomForm from "@/components/form/CustomForm";
 import InputElement from "@/components/form/InputElement";
 import SelectElement from "@/components/form/SelectElement";
 import { companyOptions, groupOptions } from "@/utils/all-options/options";
-import { SearchOutlined } from "@ant-design/icons";
-import { Col, Flex, Pagination, Row, Space, Table } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import {
+  Col,
+  Flex,
+  Pagination,
+  Popconfirm,
+  Row,
+  Space,
+  Table,
+  Tooltip,
+} from "antd";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function AllProduct() {
@@ -16,6 +31,7 @@ export default function AllProduct() {
     company: "",
     groupName: "",
   });
+  const Router = useRouter();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -65,6 +81,34 @@ export default function AllProduct() {
         </div>
       ),
     },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Space>
+          <Tooltip title="Edit This product">
+            <EditOutlined
+              onClick={() => {}}
+              className="cursor-pointer"
+              size={30}
+            />
+          </Tooltip>
+
+          <Tooltip title="Delete This Product">
+            <Popconfirm
+              title="Are you sure!"
+              description="Do you want to delete this This product"
+              onConfirm={() => {}}
+            >
+              <DeleteOutlined
+                className="cursor-pointer text-red-500"
+                size={30}
+              />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
+    },
   ];
 
   const handlePageChange = (page, pageSize) => {
@@ -80,9 +124,16 @@ export default function AllProduct() {
   return (
     <Row gutter={[0, 10]}>
       <Col span={24}>
-        <h2 className="text-2xl font-medium text-right md:text-left text-white text-balance">
-          All Products
-        </h2>
+        <div className="flex flex-col md:flex-row justify-between gap-2">
+          <h2 className="text-2xl font-medium text-right md:text-left text-white text-balance">
+            All Products
+          </h2>
+          <PrimaryButton
+            onClick={() => Router.push("/dashboard/admin/add-product")}
+            title={"Add Product"}
+            icon={<PlusCircleOutlined />}
+          />
+        </div>
       </Col>
 
       <Col span={24}>

@@ -37,7 +37,9 @@ export default function DashboardHeader() {
             className="h-8 w-8 rounded-full"
             alt={name}
           />
-          <p className="text-2xl font-semibold text-white">{name}</p>
+          <p className="text-lg md:text-2xl font-semibold text-white text-balance">
+            {name}
+          </p>
         </Flex>
 
         <PrimaryButton

@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 export function middleware(req) {
   const token = req.cookies.get("refreshToken");
+  let user;
   if (token) {
-    const decoded = jwtDecode(token?.value);
+    user = jwtDecode(token?.value);
   }
 
   if (token) {

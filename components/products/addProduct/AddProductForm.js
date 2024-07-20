@@ -7,7 +7,9 @@ import SelectElement from "@/components/form/SelectElement";
 import { companyOptions, groupOptions } from "@/utils/all-options/options";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Col, Form, Row } from "antd";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -15,6 +17,8 @@ import { z } from "zod";
 function AddProductForm() {
   const { user } = useSelector((state) => state.user);
   const [addProduct, { isLoading }] = useAddProductMutation();
+  const { reset } = useForm();
+  const Router = useRouter();
 
   const addProductResolver = z.object({
     code: z.string({ required_error: "Code is required" }),
@@ -42,6 +46,8 @@ function AddProductForm() {
           position: "top-center",
           id: toasterId,
         });
+        reset();
+        Router.push("/dashboard/admin/all-products");
       }
     } catch (error) {
       toast.error(error.data?.message, {
