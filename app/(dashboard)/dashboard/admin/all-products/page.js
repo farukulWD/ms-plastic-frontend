@@ -121,6 +121,10 @@ export default function AllProduct() {
     }
   }, [data]);
 
+  const handleEdit = () => {
+    console.log("edit");
+  };
+
   return (
     <Row gutter={[0, 10]}>
       <Col span={24}>
