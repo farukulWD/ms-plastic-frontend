@@ -35,6 +35,15 @@ export const addminRout = [
   },
   {
     name: "Cart Managment",
-    children: [],
+    children: [
+      {
+        name: "Add Cart",
+        path: "/add-to-cart",
+      },
+      {
+        name: "All Carts",
+        path: "/all-carts",
+      },
+    ],
   },
 ];
