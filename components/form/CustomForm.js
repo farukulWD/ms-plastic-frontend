@@ -13,6 +13,7 @@ export default function CustomForm({
   if (resolver) {
     formConfig["resolver"] = resolver;
   }
+  console.log(defaultValues);
 
   if (defaultValues) {
     formConfig["defaultValues"] = defaultValues;

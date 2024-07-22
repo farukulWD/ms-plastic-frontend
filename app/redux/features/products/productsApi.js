@@ -20,7 +20,32 @@ const productsApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+    getSingleProduct: builder.query({
+      query: (id) => {
+        return {
+          url: `/product/get-single-product/${id}`,
+          method: "GET",
+        };
+      },
+    }),
+
+    updateProduct: builder.mutation({
+      query: (arg) => {
+        const { id, data } = arg;
+        return {
+          url: `/product/edit-product/${id}`,
+          method: "PATCH",
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddProductMutation, useAllProductsQuery } = productsApi;
+export const {
+  useAddProductMutation,
+  useAllProductsQuery,
+  useGetSingleProductQuery,
+  useUpdateProductMutation,
+} = productsApi;

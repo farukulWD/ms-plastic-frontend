@@ -10,6 +10,7 @@ export default function InputElement({
   label,
   className,
   placeholder,
+  ...rest
 }) {
   return (
     <Controller
@@ -50,6 +51,7 @@ export default function InputElement({
               {...field}
               id={name}
               type={type}
+              {...rest}
             />
           )}
 

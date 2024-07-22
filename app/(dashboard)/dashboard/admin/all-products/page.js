@@ -21,7 +21,7 @@ import {
   Table,
   Tooltip,
 } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function AllProduct() {
@@ -30,12 +30,16 @@ export default function AllProduct() {
     code: "",
     company: "",
     groupName: "",
+    sort: "",
   });
+  const params = useSearchParams();
+  const r = params.get("r");
+
   const Router = useRouter();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data, isLoading } = useAllProductsQuery({
+  const { data, isLoading, refetch } = useAllProductsQuery({
     page,
     limit,
     ...filters,
@@ -88,7 +92,9 @@ export default function AllProduct() {
         <Space>
           <Tooltip title="Edit This product">
             <EditOutlined
-              onClick={() => {}}
+              onClick={() =>
+                Router.push(`/dashboard/admin/edit-product/?id=${record?._id}`)
+              }
               className="cursor-pointer"
               size={30}
             />
@@ -121,9 +127,16 @@ export default function AllProduct() {
     }
   }, [data]);
 
-  const handleEdit = () => {
-    console.log("edit");
-  };
+  useEffect(() => {
+    if (r) {
+      refetch();
+    }
+  }, [r]);
+
+  const sortOption = [
+    { value: "oldest", label: "Oldest" },
+    { value: "newst", label: "Newest" },
+  ];
 
   return (
     <Row gutter={[0, 10]}>
@@ -143,32 +156,39 @@ export default function AllProduct() {
       <Col span={24}>
         <CustomForm onSubmit={handleFilter}>
           <Row gutter={[10, 10]}>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 4 }}>
               <InputElement
                 name={"name"}
                 type="text"
                 placeholder={"Type Name"}
               />
             </Col>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 4 }}>
               <InputElement
                 name={"code"}
                 type="text"
                 placeholder={"Product code"}
               />
             </Col>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 4 }}>
               <SelectElement
                 name={"groupName"}
                 options={groupOptions}
                 placeholder={"Select Group Name"}
               />
             </Col>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 4 }}>
               <SelectElement
                 name={"company"}
                 options={companyOptions}
                 placeholder={"Select Compnay name"}
+              />
+            </Col>
+            <Col span={24} lg={{ span: 4 }}>
+              <SelectElement
+                name={"sort"}
+                options={sortOption}
+                placeholder={"Sort option"}
               />
             </Col>
             <Col span={24} lg={{ span: 4 }}>

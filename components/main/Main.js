@@ -4,18 +4,21 @@ import { Layout } from "antd";
 import SideBar from "./SideBar";
 import DashboardHeader from "./Header";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 const { Content, Footer } = Layout;
 
 const Main = ({ children }) => {
   const Router = useRouter();
   const { user } = useSelector((state) => state.user);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (user) {
-      Router.push(`/dashboard/${user?.role}`);
+      if (pathname === "/dashboard") {
+        Router.push(`/dashboard/${user?.role}`);
+      }
     }
-  }, [user]);
+  }, [user, pathname]);
   return (
     <Layout style={{ height: "100%" }}>
       <SideBar />
