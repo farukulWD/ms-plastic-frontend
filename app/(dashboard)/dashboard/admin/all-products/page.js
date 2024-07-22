@@ -1,5 +1,8 @@
 "use client";
-import { useAllProductsQuery } from "@/app/redux/features/products/productsApi";
+import {
+  useAllProductsQuery,
+  useDeleteProductMutation,
+} from "@/app/redux/features/products/productsApi";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import CustomForm from "@/components/form/CustomForm";
 import InputElement from "@/components/form/InputElement";
@@ -23,6 +26,7 @@ import {
 } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function AllProduct() {
   const [filters, setFilters] = useState({
@@ -30,7 +34,7 @@ export default function AllProduct() {
     code: "",
     company: "",
     groupName: "",
-    sort: "",
+    sort: "newest",
   });
   const params = useSearchParams();
   const r = params.get("r");
@@ -44,9 +48,37 @@ export default function AllProduct() {
     limit,
     ...filters,
   });
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const handleFilter = (data) => {
     setFilters(data);
     setPage(1);
+  };
+
+  const handleDelete = async (id) => {
+    const toasterId = toast.loading("Deleting", { position: "top-center" });
+    try {
+      const res = await deleteProduct({ id }).unwrap();
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, {
+          position: "top-center",
+          id: toasterId,
+          duration: 2000,
+        });
+      } else {
+        toast.success("The product delete has been success", {
+          position: "top-center",
+          id: toasterId,
+          duration: 2000,
+        });
+        refetch();
+      }
+    } catch (error) {
+      toast.error(error?.data?.message, {
+        position: "top-center",
+        id: toasterId,
+        duration: 2000,
+      });
+    }
   };
 
   const columns = [
@@ -104,7 +136,7 @@ export default function AllProduct() {
             <Popconfirm
               title="Are you sure!"
               description="Do you want to delete this This product"
-              onConfirm={() => {}}
+              onConfirm={() => handleDelete(record?._id)}
             >
               <DeleteOutlined
                 className="cursor-pointer text-red-500"
@@ -135,7 +167,7 @@ export default function AllProduct() {
 
   const sortOption = [
     { value: "oldest", label: "Oldest" },
-    { value: "newst", label: "Newest" },
+    { value: "newest", label: "Newest" },
   ];
 
   return (
