@@ -34,7 +34,6 @@ export default function AllProduct() {
     code: "",
     company: "",
     groupName: "",
-    sort: "newest",
   });
   const params = useSearchParams();
   const r = params.get("r");
@@ -47,6 +46,7 @@ export default function AllProduct() {
     page,
     limit,
     ...filters,
+    sort: "newest",
   });
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const handleFilter = (data) => {
@@ -94,6 +94,7 @@ export default function AllProduct() {
     {
       title: "Group Name",
       dataIndex: "groupName",
+      render: (groupName) => <span className="capitalize">{groupName}</span>,
     },
     {
       title: "Price",
@@ -165,11 +166,6 @@ export default function AllProduct() {
     }
   }, [r]);
 
-  const sortOption = [
-    { value: "oldest", label: "Oldest" },
-    { value: "newest", label: "Newest" },
-  ];
-
   return (
     <Row gutter={[0, 10]}>
       <Col span={24}>
@@ -188,41 +184,35 @@ export default function AllProduct() {
       <Col span={24}>
         <CustomForm onSubmit={handleFilter}>
           <Row gutter={[10, 10]}>
-            <Col span={24} lg={{ span: 4 }}>
+            <Col span={24} lg={{ span: 5 }}>
               <InputElement
                 name={"name"}
                 type="text"
                 placeholder={"Type Name"}
               />
             </Col>
-            <Col span={24} lg={{ span: 4 }}>
+            <Col span={24} lg={{ span: 5 }}>
               <InputElement
                 name={"code"}
                 type="text"
                 placeholder={"Product code"}
               />
             </Col>
-            <Col span={24} lg={{ span: 4 }}>
+            <Col span={24} lg={{ span: 5 }}>
               <SelectElement
                 name={"groupName"}
                 options={groupOptions}
                 placeholder={"Select Group Name"}
               />
             </Col>
-            <Col span={24} lg={{ span: 4 }}>
+            <Col span={24} lg={{ span: 5 }}>
               <SelectElement
                 name={"company"}
                 options={companyOptions}
                 placeholder={"Select Compnay name"}
               />
             </Col>
-            <Col span={24} lg={{ span: 4 }}>
-              <SelectElement
-                name={"sort"}
-                options={sortOption}
-                placeholder={"Sort option"}
-              />
-            </Col>
+
             <Col span={24} lg={{ span: 4 }}>
               <PrimaryButton
                 className={"w-full bg-blue-color"}
