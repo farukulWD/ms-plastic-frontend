@@ -29,7 +29,7 @@ function CommonModal({
     >
       <Modal
         centered
-        className={cn("bg-black-primary", className)}
+        className={cn("bg-black-primary rounded-md", className)}
         open={isOpen}
         onCancel={onClose}
         {...rest}

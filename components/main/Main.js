@@ -12,13 +12,13 @@ const Main = ({ children }) => {
   const { user } = useSelector((state) => state.user);
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (user) {
-      if (pathname === "/dashboard") {
-        Router.push(`/dashboard/${user?.role}`);
-      }
-    }
-  }, [user, pathname]);
+  // useEffect(() => {
+  //   if (user) {
+  //     if (pathname === "/dashboard") {
+  //       Router.push(`/dashboard/${user?.role}`);
+  //     }
+  //   }
+  // }, [user, pathname]);
   return (
     <Layout style={{ height: "100%" }}>
       <SideBar />

@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <AntConfigProvider>{children}</AntConfigProvider>
 
-          <Toaster richColors />
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>

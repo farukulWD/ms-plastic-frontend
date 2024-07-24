@@ -1,16 +1,18 @@
 "use client";
 
+import { useAddCartMutation } from "@/app/redux/features/cartManagement/cartApi";
 import { useAllProductsQuery } from "@/app/redux/features/products/productsApi";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import CustomForm from "@/components/form/CustomForm";
 import InputElement from "@/components/form/InputElement";
 import CommonModal from "@/components/modal/CommonModal";
 import {
+  DeleteOutlined,
   MinusCircleOutlined,
   PlusCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Col, Flex, Pagination, Row, Space, Table, Tooltip } from "antd";
+import { Col, Flex, Input, Pagination, Row, Space, Table, Tooltip } from "antd";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -24,8 +26,9 @@ export default function GroupProduct() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [cartProduct, setCartProduct] = useState([]);
+  const [cartName, setCartName] = useState("");
 
-  // ! for modal
+  // ! for modal start
   const [isShowModal, setIsShowModal] = useState(false);
 
   // ! modal end
@@ -33,7 +36,7 @@ export default function GroupProduct() {
     name: "",
     code: "",
   });
-
+  const [addCart, { data: AddCartData }] = useAddCartMutation();
   const { data, isLoading, refetch } = useAllProductsQuery(
     {
       page,
@@ -87,12 +90,21 @@ export default function GroupProduct() {
       dataIndex: "action",
       render: (_, record) => (
         <Space>
-          <Tooltip title="Add to Cart">
-            <PlusCircleOutlined
-              className="text-xl"
-              onClick={() => handleCartProduct(record)}
-            />
-          </Tooltip>
+          {checkExisting(record?._id) ? (
+            <Tooltip title={"Delete from cart"}>
+              <DeleteOutlined
+                className="text-xl text-red-500"
+                onClick={() => handleRemoveFromCart(record?._id)}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Add to Cart">
+              <PlusCircleOutlined
+                className="text-xl"
+                onClick={() => handleCartProduct(record)}
+              />
+            </Tooltip>
+          )}
         </Space>
       ),
     },
@@ -112,10 +124,17 @@ export default function GroupProduct() {
     setPage(1);
   };
 
+  const checkExisting = (id) => {
+    const exit = cartProduct?.find((p) => p?._id === id);
+    return exit;
+  };
+
   const handleCartProduct = (product) => {
-    const existing = cartProduct?.find((p) => p?._id === product?._id);
-    if (existing) {
-      return toast.warning("This product already added", { duration: 2000 });
+    if (checkExisting(product?._id)) {
+      return toast.warning("This product already added", {
+        duration: 2000,
+        position: "top-center",
+      });
     } else {
       setCartProduct((pre) => {
         return [...pre, product];
@@ -123,8 +142,50 @@ export default function GroupProduct() {
     }
   };
 
+  const handleRemoveFromCart = (id) => {
+    const getExistingProductAfterDelete = cartProduct.filter(
+      (p) => p?._id !== id
+    );
+    setCartProduct(getExistingProductAfterDelete);
+  };
+
   const handleAddToCard = async () => {
-    setIsShowModal(true);
+    if (!cartName) {
+      return toast.error("Cart Name is required", { position: "top-center" });
+    }
+
+    const products = await productData?.reduce((acc, item) => {
+      if (item) {
+        const { product, quantity } = item;
+        acc.push({
+          product: product,
+          quantity: quantity,
+        });
+      }
+      return acc;
+    }, []);
+
+    const cartBody = {
+      products: products,
+      cartName: cartName,
+      user: user?._id,
+      groupName: pathname?.group,
+    };
+    const tosterId = toast.loading("Cart creating");
+    try {
+      const res = await addCart(cartBody);
+
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 200, id: tosterId });
+      } else {
+        toast.success("Cart created success", { duration: 2000, id: tosterId });
+        refetch();
+        setIsShowModal(false);
+        setProductData([]), setCartProduct([]);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message, { duration: 2000, id: tosterId });
+    }
   };
 
   useEffect(() => {
@@ -165,11 +226,18 @@ export default function GroupProduct() {
   return (
     <Row gutter={[0, 10]}>
       <Col className="mb-3" span={24}>
-        <h2 className="text-2xl font-medium text-right md:text-left text-white text-balance">
-          Products of <span className="capitalize">{pathname?.group}</span>{" "}
-          group
-        </h2>
-        <PrimaryButton onClick={() => handleAddToCard()} title={"Save Cart"} />
+        <div className="flex flex-col md:flex-row justify-between gap-2">
+          <h2 className="text-2xl font-medium text-right md:text-left text-white text-balance">
+            Products of <span className="capitalize">{pathname?.group}</span>{" "}
+            group
+          </h2>
+          {productData.length > 0 && (
+            <PrimaryButton
+              onClick={() => setIsShowModal(true)}
+              title={"Show and Process"}
+            />
+          )}
+        </div>
       </Col>
 
       <Col span={24}>
@@ -228,11 +296,20 @@ export default function GroupProduct() {
         footer={false}
         mask={false}
         children={
-          <Row>
+          <Row className="pt-5" gutter={[10, 10]}>
             <Col span={24}>
-              {productData?.map((p) => (
-                <Row key={p?.product}>
-                  <Col className="pt-5" span={24}>
+              <Input
+                name={"cartName"}
+                label={"Cart Name"}
+                placeholder={"Cart Name"}
+                className="outline-none placeholder:text-gray-400 border-none text-white focus:bg-gray-700 hover:bg-gray-700 focus:border-none focus-within:shadow-none focus-within:border-none focus:outline-none rounded-lg py-3 px-4 h-full w-full bg-gray-700 focus-within:bg-gray-700"
+                onChange={(e) => setCartName(e.target.value)}
+              ></Input>
+            </Col>
+            <Col span={24}>
+              <Row gutter={[0, 10]}>
+                {productData?.map((p) => (
+                  <Col key={p?.product} span={24}>
                     <Flex justify="space-between" align="center">
                       <p>{p?.productName}</p>
                       <div className="flex gap-2 justify-between items-center">
@@ -248,8 +325,14 @@ export default function GroupProduct() {
                       </div>
                     </Flex>
                   </Col>
-                </Row>
-              ))}
+                ))}
+              </Row>
+              <Col className="mt-3 flex justify-end" span={24}>
+                <PrimaryButton
+                  onClick={() => handleAddToCard("This is cart name")}
+                  title={"Confirm"}
+                />
+              </Col>
             </Col>
           </Row>
         }
