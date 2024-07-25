@@ -10,6 +10,7 @@ const cartApi = baseApi.injectEndpoints({
           body: data,
         };
       },
+      invalidatesTags: ["allCarts"],
     }),
 
     getCarts: builder.query({
@@ -20,6 +21,7 @@ const cartApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
+      providesTags: ["allCarts"],
     }),
 
     deleteCart: builder.mutation({
@@ -30,6 +32,7 @@ const cartApi = baseApi.injectEndpoints({
           body: { id: id },
         };
       },
+      invalidatesTags: ["allCarts"],
     }),
   }),
 });

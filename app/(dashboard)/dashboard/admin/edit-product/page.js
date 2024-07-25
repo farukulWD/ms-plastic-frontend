@@ -50,22 +50,19 @@ export default function EditProduct() {
         toast.error(res?.error?.data?.message, {
           id: toasterId,
           duration: 2000,
-          position: "top-center",
         });
       } else {
         toast.success("The update hase been success", {
           id: toasterId,
           duration: 2000,
-          position: "top-center",
         });
         refetch();
-        Router.push("/dashboard/admin/all-products?r=true");
+        Router.push("/dashboard/admin/all-products");
       }
     } catch (error) {
       toast.error(error?.data?.message, {
         id: toasterId,
         duration: 2000,
-        position: "top-center",
       });
     }
   };

@@ -14,17 +14,8 @@ import {
   PlusCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import {
-  Col,
-  Flex,
-  Pagination,
-  Popconfirm,
-  Row,
-  Space,
-  Table,
-  Tooltip,
-} from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Col, Pagination, Popconfirm, Row, Space, Table, Tooltip } from "antd";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -35,20 +26,18 @@ export default function AllProduct() {
     company: "",
     groupName: "",
   });
-  const params = useSearchParams();
-  const r = params.get("r");
 
   const Router = useRouter();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data, isLoading, refetch } = useAllProductsQuery({
+  const { data, isLoading } = useAllProductsQuery({
     page,
     limit,
     ...filters,
     sort: "newest",
   });
-  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
   const handleFilter = (data) => {
     setFilters(data);
     setPage(1);
@@ -60,21 +49,17 @@ export default function AllProduct() {
       const res = await deleteProduct({ id }).unwrap();
       if (res?.error) {
         toast.error(res?.error?.data?.message, {
-          position: "top-center",
           id: toasterId,
           duration: 2000,
         });
       } else {
         toast.success("The product delete has been success", {
-          position: "top-center",
           id: toasterId,
           duration: 2000,
         });
-        refetch();
       }
     } catch (error) {
       toast.error(error?.data?.message, {
-        position: "top-center",
         id: toasterId,
         duration: 2000,
       });
@@ -159,12 +144,6 @@ export default function AllProduct() {
       setTotal(data.data.pagination.total);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (r) {
-      refetch();
-    }
-  }, [r]);
 
   return (
     <Row gutter={[0, 10]}>

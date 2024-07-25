@@ -36,8 +36,8 @@ export default function GroupProduct() {
     name: "",
     code: "",
   });
-  const [addCart, { data: AddCartData }] = useAddCartMutation();
-  const { data, isLoading, refetch } = useAllProductsQuery(
+  const [addCart] = useAddCartMutation();
+  const { data, isLoading } = useAllProductsQuery(
     {
       page,
       limit,
@@ -179,7 +179,6 @@ export default function GroupProduct() {
         toast.error(res?.error?.data?.message, { duration: 200, id: tosterId });
       } else {
         toast.success("Cart created success", { duration: 2000, id: tosterId });
-        refetch();
         setIsShowModal(false);
         setProductData([]), setCartProduct([]);
       }

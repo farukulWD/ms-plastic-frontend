@@ -10,6 +10,7 @@ const productsApi = baseApi.injectEndpoints({
           body: productInfo,
         };
       },
+      invalidatesTags: ["allProducts"],
     }),
     allProducts: builder.query({
       query: (arg) => {
@@ -19,6 +20,7 @@ const productsApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
+      providesTags: ["allProducts"],
     }),
 
     getSingleProduct: builder.query({
@@ -39,6 +41,7 @@ const productsApi = baseApi.injectEndpoints({
           body: data,
         };
       },
+      invalidatesTags: ["allProducts"],
     }),
 
     deleteProduct: builder.mutation({
@@ -49,6 +52,7 @@ const productsApi = baseApi.injectEndpoints({
           body: id,
         };
       },
+      invalidatesTags: ["allProducts"],
     }),
   }),
 });

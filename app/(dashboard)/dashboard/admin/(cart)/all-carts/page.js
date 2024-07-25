@@ -30,7 +30,7 @@ export default function AllCarts() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data, isLoading, refetch } = useGetCartsQuery();
+  const { data, isLoading } = useGetCartsQuery();
   const [deleteCart] = useDeleteCartMutation();
 
   const handleDelete = async (id) => {
@@ -41,7 +41,6 @@ export default function AllCarts() {
         toast.error(res?.error?.data?.message, { duration: 200, id: tosterId });
       } else {
         toast.success("Cart deleted success", { duration: 2000, id: tosterId });
-        refetch();
       }
     } catch (error) {
       toast.error(error?.data?.message, { id: tosterId });
