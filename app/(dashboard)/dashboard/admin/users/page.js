@@ -1,9 +1,10 @@
 "use client";
+
 import {
   useDeleteUserMutation,
   useGetAllUserQuery,
   useUpdateRoleMutation,
-} from "@/app/redux/features/auth/authApi";
+} from "@/app/redux/features/userManagement/userApi";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import CustomForm from "@/components/form/CustomForm";
 import InputElement from "@/components/form/InputElement";
@@ -29,19 +30,14 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export default function Admin() {
-  const [filters, setFilters] = useState({ name: "", email: "", role: "" });
+  const [filters, setFilters] = useState({ searchTerm: "", role: "" });
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [editRoleModalOpen, setEditRoleModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [updateRole, { data: upadatData, isSuccess }] = useUpdateRoleMutation();
-  const [deleteUser, { isSuccess: successDelete }] = useDeleteUserMutation();
-  const { data, isLoading, refetch } = useGetAllUserQuery({
-    page,
-    limit,
-    ...filters,
-  });
+  const [updateRole] = useUpdateRoleMutation();
+  const [deleteUser] = useDeleteUserMutation();
+  const { data, isLoading, refetch } = useGetAllUserQuery({ page, ...filters });
 
   const handleEditShow = (record) => {
     setSelected(record);
@@ -56,14 +52,13 @@ export default function Admin() {
     data.id = selected?._id;
     data.email = selected?.email;
     try {
-      const result = await updateRole(data).unwrap();
+      await updateRole(data).unwrap();
       toast.success("Role update Success", {
         id: toasterId,
         position: "top-center",
       });
       setSelected(null);
       setEditRoleModalOpen(false);
-      refetch();
     } catch (error) {
       toast.error(error?.data?.message, {
         id: toasterId,
@@ -82,7 +77,6 @@ export default function Admin() {
           id: toasterId,
           position: "top-center",
         });
-        refetch();
       } else {
         toast.error(res?.error?.data?.message, {
           id: toasterId,
@@ -186,14 +180,13 @@ export default function Admin() {
 
   const handleFilter = (data) => {
     setFilters(data);
-    setPage(1);
   };
 
-  const handlePageChange = (page, pageSize) => {
+  const handlePageChange = (page) => {
     setPage(page);
-    setLimit(pageSize);
   };
   const roleOption = [
+    { label: "All", value: "" },
     { label: "Admin", value: "admin" },
     { label: "User", value: "user" },
   ];
@@ -209,25 +202,20 @@ export default function Admin() {
         <Col span={24}>
           <CustomForm onSubmit={handleFilter}>
             <Row gutter={[10, 10]}>
-              <Col span={24} lg={{ span: 6 }}>
+              <Col span={24} lg={{ span: 9 }}>
                 <InputElement
-                  name={"name"}
+                  name={"searchTerm"}
                   type="text"
-                  placeholder={"Type Name"}
+                  placeholder={"Name or Email"}
                 />
               </Col>
-              <Col span={24} lg={{ span: 6 }}>
-                <InputElement
-                  name={"email"}
-                  type="text"
-                  placeholder={"Type Email"}
-                />
-              </Col>
-              <Col span={24} lg={{ span: 6 }}>
-                <InputElement
+
+              <Col span={24} lg={{ span: 9 }}>
+                <SelectElement
                   name={"role"}
-                  type="text"
                   placeholder={"Select Role"}
+                  options={roleOption}
+                  defaultValue={"All"}
                 />
               </Col>
               <Col span={24} lg={{ span: 6 }}>
@@ -254,7 +242,7 @@ export default function Admin() {
           <Pagination
             total={total}
             current={page}
-            pageSize={limit}
+            pageSize={data?.data?.pagination?.limit}
             showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
             }

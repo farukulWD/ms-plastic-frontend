@@ -20,7 +20,8 @@ function Register() {
     formData.append("file", data.profilePicture);
     const toasterId = toast.loading("creating", { position: "top-center" });
     try {
-      await register(formData).unwrap();
+      const res = await register(formData).unwrap();
+      console.log(res);
       toast.success("User register success", {
         id: toasterId,
         position: "top-center",
@@ -28,6 +29,7 @@ function Register() {
       });
       router.push("/auth/login");
     } catch (error) {
+      console.log(error);
       toast.error(error?.data?.message, {
         id: toasterId,
         position: "top-center",

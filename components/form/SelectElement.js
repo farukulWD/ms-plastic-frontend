@@ -2,7 +2,14 @@ import cn from "@/utils/cn";
 import { Form, Select } from "antd";
 import { Controller } from "react-hook-form";
 
-const SelectElement = ({ label, name, options, className, placeholder }) => {
+const SelectElement = ({
+  label,
+  name,
+  options,
+  className,
+  placeholder,
+  ...rest
+}) => {
   return (
     <Controller
       name={name}
@@ -20,6 +27,7 @@ const SelectElement = ({ label, name, options, className, placeholder }) => {
             )}
             style={{ width: "100%" }}
             {...field}
+            {...rest}
             options={options}
             size="large"
             placeholder={placeholder}

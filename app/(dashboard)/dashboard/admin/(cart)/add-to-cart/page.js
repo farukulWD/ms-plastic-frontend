@@ -14,7 +14,7 @@ export default function AddToCart() {
   const Router = useRouter();
 
   const handleSubmit = (data) => {
-    Router.push(`/dashboard/admin/add-to-cart/${data?.group}`);
+    Router.push(`/dashboard/admin/cart/add-to-cart/${data?.group}`);
   };
   const groupResolver = z.object({
     group: z.string({ required_error: "Please select group" }),

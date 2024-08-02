@@ -38,11 +38,11 @@ export const addminRout = [
     children: [
       {
         name: "Add Cart",
-        path: "/add-to-cart",
+        path: "/cart/add-to-cart",
       },
       {
         name: "All Carts",
-        path: "/all-carts",
+        path: "/cart/all-carts",
       },
     ],
   },

@@ -10,7 +10,42 @@ const userApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getAllUser: builder.query({
+      query: (query) => {
+        return {
+          url: "/user/users",
+          method: "GET",
+          params: query,
+        };
+      },
+      providesTags: ["allUsers"],
+    }),
+    updateRole: builder.mutation({
+      query: (userInfo) => {
+        return {
+          url: "/user/update-user-role",
+          method: "PATCH",
+          body: userInfo,
+        };
+      },
+      invalidatesTags: ["allUsers"],
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => {
+        return {
+          url: "/user/delete-user",
+          method: "DELETE",
+          body: id,
+        };
+      },
+      invalidatesTags: ["allUsers"],
+    }),
   }),
 });
 
-export const { useGetUserQuery } = userApi;
+export const {
+  useGetUserQuery,
+  useGetAllUserQuery,
+  useDeleteUserMutation,
+  useUpdateRoleMutation,
+} = userApi;

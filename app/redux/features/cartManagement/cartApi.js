@@ -24,6 +24,15 @@ const cartApi = baseApi.injectEndpoints({
       providesTags: ["allCarts"],
     }),
 
+    getSingleCart: builder.query({
+      query: (id) => {
+        return {
+          url: `cart/get-single-cart/${id}`,
+          method: "GET",
+        };
+      },
+    }),
+
     deleteCart: builder.mutation({
       query: (id) => {
         return {
@@ -37,5 +46,9 @@ const cartApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAddCartMutation, useGetCartsQuery, useDeleteCartMutation } =
-  cartApi;
+export const {
+  useAddCartMutation,
+  useGetCartsQuery,
+  useDeleteCartMutation,
+  useGetSingleCartQuery,
+} = cartApi;

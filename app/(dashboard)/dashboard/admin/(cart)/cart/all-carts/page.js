@@ -99,7 +99,12 @@ export default function AllCarts() {
       render: (_, record) => (
         <Flex gap={10}>
           <Tooltip title="View Cart">
-            <EyeOutlined className="2xl cursor-pointer" />
+            <EyeOutlined
+              onClick={() =>
+                Router.push(`/dashboard/admin/cart/${record?._id}`)
+              }
+              className="2xl cursor-pointer"
+            />
           </Tooltip>
           <Tooltip title="Edit Cart">
             <EditOutlined className="2xl cursor-pointer" />

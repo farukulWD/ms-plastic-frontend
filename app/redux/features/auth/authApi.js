@@ -38,33 +38,6 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getAllUser: builder.query({
-      query: (query) => {
-        return {
-          url: "/user/users",
-          method: "GET",
-          params: query,
-        };
-      },
-    }),
-    updateRole: builder.mutation({
-      query: (userInfo) => {
-        return {
-          url: "/user/update-user-role",
-          method: "PATCH",
-          body: userInfo,
-        };
-      },
-    }),
-    deleteUser: builder.mutation({
-      query: (id) => {
-        return {
-          url: "/user/delete-user",
-          method: "DELETE",
-          body: id,
-        };
-      },
-    }),
   }),
 });
 
@@ -72,8 +45,6 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useForgotPasswordMutation,
-  useGetAllUserQuery,
+
   useResetPasswordMutation,
-  useUpdateRoleMutation,
-  useDeleteUserMutation,
 } = authApi;
