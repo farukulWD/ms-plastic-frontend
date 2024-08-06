@@ -1,0 +1,10 @@
+.ant-upload-wrapper .ant-upload-select {
+  display: block;
+}
+
+.ant-upload-list-item {
+  @apply text-white;
+  .anticon {
+    @apply text-white;
+  }
+}
