@@ -21,8 +21,7 @@ import { toast } from "sonner";
 
 export default function AllProduct() {
   const [filters, setFilters] = useState({
-    name: "",
-    code: "",
+    searchTerm: "",
     company: "",
     groupName: "",
   });
@@ -33,9 +32,7 @@ export default function AllProduct() {
   const [limit, setLimit] = useState(10);
   const { data, isLoading } = useAllProductsQuery({
     page,
-    limit,
     ...filters,
-    sort: "newest",
   });
   const [deleteProduct] = useDeleteProductMutation();
   const handleFilter = (data) => {
@@ -163,36 +160,32 @@ export default function AllProduct() {
       <Col span={24}>
         <CustomForm onSubmit={handleFilter}>
           <Row gutter={[10, 10]}>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 7 }}>
               <InputElement
-                name={"name"}
+                name={"searchTerm"}
                 type="text"
-                placeholder={"Type Name"}
+                placeholder={"Name or Code"}
               />
             </Col>
-            <Col span={24} lg={{ span: 5 }}>
-              <InputElement
-                name={"code"}
-                type="text"
-                placeholder={"Product code"}
-              />
-            </Col>
-            <Col span={24} lg={{ span: 5 }}>
+
+            <Col span={24} lg={{ span: 7 }}>
               <SelectElement
                 name={"groupName"}
                 options={groupOptions}
                 placeholder={"Select Group Name"}
+                defaultValue={"All Group"}
               />
             </Col>
-            <Col span={24} lg={{ span: 5 }}>
+            <Col span={24} lg={{ span: 7 }}>
               <SelectElement
                 name={"company"}
                 options={companyOptions}
                 placeholder={"Select Compnay name"}
+                defaultValue={"All Company"}
               />
             </Col>
 
-            <Col span={24} lg={{ span: 4 }}>
+            <Col span={24} lg={{ span: 3 }}>
               <PrimaryButton
                 className={"w-full bg-blue-color"}
                 icon={<SearchOutlined />}
@@ -216,7 +209,7 @@ export default function AllProduct() {
         <Pagination
           total={total}
           current={page}
-          pageSize={limit}
+          pageSize={data?.data?.pagination?.limit}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
           }

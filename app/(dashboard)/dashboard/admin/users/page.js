@@ -180,6 +180,7 @@ export default function Admin() {
 
   const handleFilter = (data) => {
     setFilters(data);
+    setPage(1);
   };
 
   const handlePageChange = (page) => {
